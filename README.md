@@ -2,5 +2,5 @@
 desarrollo de actividad propuesta por el profesor para el parcial
  
  para subir un cambio : git add .
-                        git commit -m "añadi un pene dibujado"
+                        git commit -m "añadi un codigo nuevo"
                         git push origin main
