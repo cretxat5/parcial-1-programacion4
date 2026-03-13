@@ -61,7 +61,6 @@ class CifroCesar:
                 posicion_actual = self.alfabeto.index(caracter)
                 
                 # Suma el desplazamiento y usa módulo 26
-                # para "dar la vuelta" si es necesario
                 nueva_posicion = (posicion_actual + self.desplazamiento) % 26
                 
                 # Obtiene la letra cifrada
@@ -317,40 +316,7 @@ class MenuSistema:
         if confirmacion == 'S':
             self.cifrador.limpiar_historial()
 
-    def opcion_informacion(self):
-        """Muestra información sobre el cifrado César."""
-        print("\n" + "="*70)
-        print("INFORMACIÓN: CIFRADO CÉSAR")
-        print("="*70)
-        print("""
-El Cifrado César es uno de los algoritmos de encriptación más antiguos.
 
-¿CÓMO FUNCIONA?
-- Cada letra se desplaza N posiciones en el alfabeto
-- El desplazamiento es la "clave" del cifrado
-- Ejemplo con desplazamiento 3:
-  A → D, B → E, C → F, ..., Z → C
-
-MATEMÁTICAMENTE:
-- Cifrado:   C = (P + K) mod 26
-  Donde: C = carácter cifrado, P = posición original, K = desplazamiento
-  
-- Descifrado: P = (C - K) mod 26
-  Donde: P = posición original, C = carácter cifrado, K = desplazamiento
-
-CARACTERÍSTICAS:
-✓ Fácil de implementar
-✓ Fácil de entender
-✓ Completamente reversible
-✗ Poco seguro (solo 25 combinaciones posibles)
-✗ Vulnerable al análisis de frecuencia
-
-EJEMPLO:
-Mensaje original: "HOLA MUNDO"
-Desplazamiento:   3
-Mensaje cifrado:  "KROH PXQGR"
-        """)
-        print("="*70 + "\n")
 
     def ejecutar(self):
         """Ejecuta el menú principal."""
@@ -374,8 +340,7 @@ Mensaje cifrado:  "KROH PXQGR"
                 self.opcion_cambiar_desplazamiento()
             elif opcion == "8":
                 self.opcion_limpiar_historial()
-            elif opcion == "9":
-                self.opcion_informacion()
+            
             elif opcion == "10":
                 
                 break
