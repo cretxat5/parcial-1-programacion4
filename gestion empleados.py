@@ -1,5 +1,7 @@
 # ===============================================
-# SISTEMA DE GESTIÓN DE EMPLEADOS
+# SISTEMA DE GESTIÓN DE EMPLEADOS - PARCIAL I
+# Santiago Cardona Sierra
+# Manuela Gutierrez Benitez
 # ===============================================
 
 # ----------------------------------------------
@@ -50,13 +52,18 @@ class Empleado:
 
     def __init__(self, nombre, id_empleado, salario_base, experiencia):
         """
-        Inicializa un empleado.
-        
+        Inicializa un empleado validando que los datos numéricos sean positivos.
+ 
+        Lanza un ValueError si el salario o la experiencia son negativos,
+        lo que impide crear un objeto con datos inválidos desde el inicio.
+ 
         Args:
-            nombre: Nombre del empleado
-            id_empleado: ID único del empleado
-            salario_base: Salario base en pesos
-            experiencia: Años de experiencia
+            nombre (str): Nombre completo del empleado.
+            id_empleado (int): Identificador único del empleado.
+            salario_base (float): Salario base mensual en pesos.
+            experiencia (int): Años de experiencia laboral del empleado.
+        Raises:
+            ValueError: Si salario_base o experiencia son negativos.
         """
         if salario_base < 0 or experiencia < 0:
             raise ValueError("Salario y experiencia no pueden ser negativos")
@@ -78,7 +85,12 @@ class Empleado:
         return self.salario_base + bono
 
     def __str__(self):
-        """Representación en texto del empleado."""
+        """
+        Retorna una representación en texto del empleado con su salario total.
+ 
+        Returns:
+            str: Cadena con nombre, ID y salario total formateado.
+        """
         return (f"Nombre: {self.nombre} | ID: {self.id_empleado} | "
                 f"Salario total: {self.calcular_salario():.2f}")
 
@@ -88,7 +100,12 @@ class Empleado:
 # ----------------------------------------------
 
 class GestorEmpleados:
-    """Clase que gestiona la colección de empleados."""
+    """
+    Clase que administra la colección de empleados.
+ 
+    Permite agregar, eliminar, buscar y editar empleados,
+    además de guardar y cargar los datos desde un archivo CSV.
+    """
 
     def __init__(self):
         """Inicializa el gestor con una lista vacía de empleados."""

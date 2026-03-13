@@ -1,5 +1,7 @@
 # ===============================================
 # SISTEMA DE VENTAS - PARCIAL I
+# Santiago Cardona Sierra
+# Manuela Gutierrez Benitez
 # ===============================================
 
 import xml.etree.ElementTree as ET
@@ -53,6 +55,15 @@ class Producto:
     """Clase que representa un producto en la tienda."""
 
     def __init__(self, nombre, id_producto, precio, cantidad):
+        """
+        Inicializa un producto con sus datos básicos.
+ 
+        Args:
+            nombre (str): Nombre descriptivo del producto.
+            id_producto (int): Identificador único del producto.
+            precio (float): Precio unitario del producto en pesos.
+            cantidad (int): Unidades disponibles en inventario.
+        """
         self.nombre = nombre
         self.id = id_producto
         self.precio = precio
