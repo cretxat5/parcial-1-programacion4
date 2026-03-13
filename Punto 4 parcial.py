@@ -10,10 +10,10 @@ while True:
             tercero = (numero // 10) % 10
             cuarto = numero % 10
 
-            # Suma
+            # Suma del segundo y tercer número
             suma = segundo + tercero
 
-            # Verificar múltiplo
+            # Verificar si el primero es múltiplo del cuarto
             if cuarto != 0 and primer % cuarto == 0:
                 print("El primer numero es multiplo del cuarto numero")
             else:
@@ -21,7 +21,12 @@ while True:
 
             print("La suma del segundo y tercer numero es:", suma)
 
-            break   # termina el programa si todo está bien
+            # Preguntar si desea continuar
+            continuar = input("¿Desea ingresar otro numero? (Si/No): ")
+
+            if continuar.lower() != "si":
+                print("Programa finalizado.")
+                break
 
         else:
             print("El numero debe tener exactamente 4 cifras. Intente nuevamente.\n")
