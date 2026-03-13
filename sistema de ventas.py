@@ -2,14 +2,56 @@
 # SISTEMA DE VENTAS - PARCIAL I
 # ===============================================
 
-# Nota importante: para este ejercicio debe implementar archivos XML,
-# la documentación quedará adjunta en la actividad de "parcial I".
-
 import xml.etree.ElementTree as ET
+
+
+# ----------------------------------------------
+# FUNCIONES AUXILIARES DE LECTURA
+# ----------------------------------------------
+
+def leer_entero(mensaje):
+    """Lee un número entero positivo con validación."""
+    while True:
+        try:
+            valor = int(input(mensaje))
+            if valor < 0:
+                print("Error: el valor no puede ser negativo")
+                continue
+            return valor
+        except ValueError:
+            print("Error: debe ingresar un número entero")
+
+
+def leer_flotante(mensaje):
+    """Lee un número flotante positivo con validación."""
+    while True:
+        try:
+            valor = float(input(mensaje))
+            if valor < 0:
+                print("Error: el valor no puede ser negativo")
+                continue
+            return valor
+        except ValueError:
+            print("Error: debe ingresar un número válido")
+
+
+def leer_texto(mensaje):
+    """Lee texto alfabético con validación."""
+    while True:
+        valor = input(mensaje)
+        if valor.replace(" ", "").isalpha():
+            return valor.title()
+        else:
+            print("Error: solo se permiten letras")
+
+
+# ----------------------------------------------
+# CLASES
+# ----------------------------------------------
 
 class Producto:
     """Clase que representa un producto en la tienda."""
-    
+
     def __init__(self, nombre, id_producto, precio, cantidad):
         self.nombre = nombre
         self.id = id_producto
@@ -38,13 +80,16 @@ class Producto:
         print(f"Producto: {self.nombre}")
         print(f"ID: {self.id}")
         print(f"Precio: ${self.precio:.2f}")
-        print(f"Cantidad: {self.cantidad}")
+        if self.cantidad == 0:
+            print("Cantidad: Ya no hay existencias en inventario")
+        else:
+            print(f"Cantidad: {self.cantidad}")
         print("------------------")
 
 
 class Cliente:
     """Clase que representa un cliente de la tienda."""
-    
+
     def __init__(self, nombre, id_cliente, saldo):
         self.nombre = nombre
         self.id = id_cliente
@@ -77,7 +122,7 @@ class Cliente:
 
 class Tienda:
     """Clase gestora del sistema de ventas."""
-    
+
     def __init__(self):
         """Inicializa la tienda con listas vacías."""
         self.productos = []
@@ -100,10 +145,7 @@ class Tienda:
         return True
 
     def realizar_venta(self, id_cliente: int, id_producto: int, cantidad: int) -> bool:
-        """
-        Realiza una venta de un producto a un cliente.
-        Valida condiciones de stock y saldo.
-        """
+        """Realiza una venta de un producto a un cliente."""
         cliente_encontrado = next((c for c in self.clientes if c.id == id_cliente), None)
         producto_encontrado = next((p for p in self.productos if p.id == id_producto), None)
 
@@ -132,14 +174,10 @@ class Tienda:
             cliente.mostrar_informacion()
 
     def guardar_datos(self, archivo: str):
-        """
-        Guarda los productos y clientes en un archivo XML.
-        Nota importante: implementa archivos XML como se requiere.
-        """
+        """Guarda los productos y clientes en un archivo XML."""
         try:
             raiz = ET.Element("tienda")
 
-            # Guardar productos
             productos_xml = ET.SubElement(raiz, "productos")
             for p in self.productos:
                 prod = ET.SubElement(productos_xml, "producto")
@@ -148,7 +186,6 @@ class Tienda:
                 ET.SubElement(prod, "precio").text = str(p.precio)
                 ET.SubElement(prod, "cantidad").text = str(p.cantidad)
 
-            # Guardar clientes
             clientes_xml = ET.SubElement(raiz, "clientes")
             for c in self.clientes:
                 cli = ET.SubElement(clientes_xml, "cliente")
@@ -156,7 +193,6 @@ class Tienda:
                 ET.SubElement(cli, "id").text = str(c.id)
                 ET.SubElement(cli, "saldo").text = str(c.saldo)
 
-            # Escribir archivo XML
             arbol = ET.ElementTree(raiz)
             arbol.write(archivo, encoding="utf-8", xml_declaration=True)
             print(f"✓ Datos guardados en {archivo}")
@@ -165,10 +201,7 @@ class Tienda:
             print(f"Error al guardar XML: {e}")
 
     def cargar_datos(self, archivo: str):
-        """
-        Carga los productos y clientes desde un archivo XML.
-        Nota importante: implementa archivos XML como se requiere.
-        """
+        """Carga los productos y clientes desde un archivo XML."""
         try:
             arbol = ET.parse(archivo)
             raiz = arbol.getroot()
@@ -176,7 +209,6 @@ class Tienda:
             self.productos.clear()
             self.clientes.clear()
 
-            # Cargar productos
             productos_elem = raiz.find("productos")
             if productos_elem is not None:
                 for prod in productos_elem:
@@ -184,18 +216,15 @@ class Tienda:
                     id_producto = int(prod.find("id").text)
                     precio = float(prod.find("precio").text)
                     cantidad = int(prod.find("cantidad").text)
-                    nuevo_producto = Producto(nombre, id_producto, precio, cantidad)
-                    self.productos.append(nuevo_producto)
+                    self.productos.append(Producto(nombre, id_producto, precio, cantidad))
 
-            # Cargar clientes
             clientes_elem = raiz.find("clientes")
             if clientes_elem is not None:
                 for cli in clientes_elem:
                     nombre = cli.find("nombre").text
                     id_cliente = int(cli.find("id").text)
                     saldo = float(cli.find("saldo").text)
-                    nuevo_cliente = Cliente(nombre, id_cliente, saldo)
-                    self.clientes.append(nuevo_cliente)
+                    self.clientes.append(Cliente(nombre, id_cliente, saldo))
 
             print(f"✓ Datos cargados desde {archivo}")
 
@@ -210,12 +239,7 @@ class Tienda:
 # ====================
 
 def main():
-    """
-    Función principal del sistema de ventas.
-    
-    Nota importante: para este ejercicio debe implementar archivos XML,
-    la documentación quedará adjunta en la actividad de "parcial I".
-    """
+    """Función principal del sistema de ventas."""
     tienda = Tienda()
 
     while True:
@@ -232,46 +256,33 @@ def main():
         opcion = input("Seleccione una opcion: ")
 
         if opcion == "1":
-            try:
-                nombre = input("Nombre del producto: ")
-                id_producto = int(input("ID del producto: "))
-                precio = float(input("Precio: "))
-                cantidad = int(input("Cantidad en inventario: "))
-                
-                if precio < 0 or cantidad < 0:
-                    print("Error: precio y cantidad no pueden ser negativos")
-                    continue
-                    
-                producto = Producto(nombre, id_producto, precio, cantidad)
-                if tienda.agregar_producto(producto):
-                    print("✓ Producto agregado")
-            except ValueError:
-                print("Error: ingrese datos válidos")
+            nombre      = leer_texto("Nombre del producto: ")
+            id_producto = leer_entero("ID del producto: ")
+            precio      = leer_flotante("Precio: ")
+            cantidad    = leer_entero("Cantidad en inventario: ")
+
+            if cantidad < 0:
+                print("Error: la cantidad no puede ser negativa")
+                continue
+
+            producto = Producto(nombre, id_producto, precio, cantidad)
+            if tienda.agregar_producto(producto):
+                print("✓ Producto agregado")
 
         elif opcion == "2":
-            try:
-                nombre = input("Nombre del cliente: ")
-                id_cliente = int(input("ID del cliente: "))
-                saldo = float(input("Saldo del cliente: "))
-                
-                if saldo < 0:
-                    print("Error: saldo no puede ser negativo")
-                    continue
-                    
-                cliente = Cliente(nombre, id_cliente, saldo)
-                if tienda.agregar_cliente(cliente):
-                    print("✓ Cliente agregado")
-            except ValueError:
-                print("Error: ingrese datos válidos")
+            nombre     = leer_texto("Nombre del cliente: ")
+            id_cliente = leer_entero("ID del cliente: ")
+            saldo      = leer_flotante("Saldo del cliente: ")
+
+            cliente = Cliente(nombre, id_cliente, saldo)
+            if tienda.agregar_cliente(cliente):
+                print("✓ Cliente agregado")
 
         elif opcion == "3":
-            try:
-                id_cliente = int(input("ID del cliente: "))
-                id_producto = int(input("ID del producto: "))
-                cantidad = int(input("Cantidad a comprar: "))
-                tienda.realizar_venta(id_cliente, id_producto, cantidad)
-            except ValueError:
-                print("Error: ingrese datos válidos")
+            id_cliente  = leer_entero("ID del cliente: ")
+            id_producto = leer_entero("ID del producto: ")
+            cantidad    = leer_entero("Cantidad a comprar: ")
+            tienda.realizar_venta(id_cliente, id_producto, cantidad)
 
         elif opcion == "4":
             tienda.mostrar_productos()

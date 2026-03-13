@@ -2,12 +2,18 @@
 # SISTEMA DE GESTIÓN DE EMPLEADOS
 # ===============================================
 
-
+# ----------------------------------------------
+# FUNCIONES AUXILIARES DE LECTURA
+# ----------------------------------------------
 def leer_entero(mensaje):
-    """Lee un número entero con validación."""
+    """Lee un número entero positivo con validación."""
     while True:
         try:
-            return int(input(mensaje))
+            valor = int(input(mensaje))
+            if valor < 0:
+                print("Error: el valor no puede ser negativo")
+                continue
+            return valor
         except ValueError:
             print("Error: debe ingresar un número entero")
 
@@ -280,4 +286,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
