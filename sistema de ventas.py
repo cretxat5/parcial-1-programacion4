@@ -78,14 +78,6 @@ class Producto:
             print("No hay suficiente inventario")
             return False
 
-    def aumentar_inventario(self, cantidad):
-        """Aumenta el inventario de forma segura."""
-        if cantidad < 0:
-            print("Error: no se puede aumentar inventario con cantidad negativa")
-            return False
-        self.cantidad += cantidad
-        return True
-
     def mostrar_informacion(self):
         """Muestra la información del producto."""
         print(f"Producto: {self.nombre}")
@@ -102,6 +94,14 @@ class Cliente:
     """Clase que representa un cliente de la tienda."""
 
     def __init__(self, nombre, id_cliente, saldo):
+        """
+        Inicializa un cliente con sus datos básicos.
+ 
+        Args:
+            nombre (str): Nombre completo del cliente.
+            id_cliente (int): Identificador único del cliente.
+            saldo (float): Saldo disponible del cliente en pesos.
+        """
         self.nombre = nombre
         self.id = id_cliente
         self.saldo = saldo
