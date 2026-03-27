@@ -1,7 +1,5 @@
 # ===============================================
 # SISTEMA DE VENTAS - PARCIAL I
-# Santiago Cardona Sierra
-# Manuela Gutierrez Benitez
 # ===============================================
 
 import xml.etree.ElementTree as ET
@@ -55,15 +53,6 @@ class Producto:
     """Clase que representa un producto en la tienda."""
 
     def __init__(self, nombre, id_producto, precio, cantidad):
-        """
-        Inicializa un producto con sus datos básicos.
- 
-        Args:
-            nombre (str): Nombre descriptivo del producto.
-            id_producto (int): Identificador único del producto.
-            precio (float): Precio unitario del producto en pesos.
-            cantidad (int): Unidades disponibles en inventario.
-        """
         self.nombre = nombre
         self.id = id_producto
         self.precio = precio
@@ -77,6 +66,14 @@ class Producto:
         else:
             print("No hay suficiente inventario")
             return False
+
+    def aumentar_inventario(self, cantidad):
+        """Aumenta el inventario de forma segura."""
+        if cantidad < 0:
+            print("Error: no se puede aumentar inventario con cantidad negativa")
+            return False
+        self.cantidad += cantidad
+        return True
 
     def mostrar_informacion(self):
         """Muestra la información del producto."""
@@ -94,14 +91,6 @@ class Cliente:
     """Clase que representa un cliente de la tienda."""
 
     def __init__(self, nombre, id_cliente, saldo):
-        """
-        Inicializa un cliente con sus datos básicos.
- 
-        Args:
-            nombre (str): Nombre completo del cliente.
-            id_cliente (int): Identificador único del cliente.
-            saldo (float): Saldo disponible del cliente en pesos.
-        """
         self.nombre = nombre
         self.id = id_cliente
         self.saldo = saldo
@@ -146,6 +135,21 @@ class Tienda:
             return False
         self.productos.append(producto)
         return True
+    
+    def aumentar_inventario_producto(self, id_producto: int, cantidad: int):
+        """Aumenta el inventario de un producto buscándolo por ID."""
+    
+        producto_encontrado = next((p for p in self.productos if p.id == id_producto), None)
+
+        if not producto_encontrado:
+            print("Error: producto no encontrado")
+            return False
+
+        if producto_encontrado.aumentar_inventario(cantidad):
+            print("✓ Inventario actualizado correctamente")
+            return True
+
+        return False
 
     def agregar_cliente(self, cliente: Cliente):
         """Agrega un cliente a la lista de clientes."""
@@ -262,7 +266,8 @@ def main():
         print("5. Mostrar clientes")
         print("6. Guardar datos (XML)")
         print("7. Cargar datos (XML)")
-        print("8. Salir")
+        print("8. Aumentar inventario")
+        print("9. Salir")
 
         opcion = input("Seleccione una opcion: ")
 
@@ -310,7 +315,12 @@ def main():
             tienda.cargar_datos(archivo)
 
         elif opcion == "8":
-            print("Saliendo del sistema...")
+            id_producto = leer_entero("ID del producto: ")
+            cantidad = leer_entero("Cantidad a agregar al inventario: ") 
+            tienda.aumentar_inventario_producto(id_producto, cantidad)
+
+        elif opcion == "9":
+            print("saliendo del sistema de ventas")
             break
 
         else:
