@@ -278,7 +278,7 @@ class MenuSistema:
         ruta_entrada = input("Ingrese la ruta del archivo a cifrar: ")
         contenido = self.gestor.leer_archivo(ruta_entrada)
         
-        if contenido:
+        if contenido is not None:
             contenido_cifrado = self.cifrador.cifrar(contenido)
             ruta_salida = input("Ingrese la ruta para guardar el archivo cifrado: ")
             self.gestor.guardar_archivo(ruta_salida, contenido_cifrado)
@@ -288,7 +288,7 @@ class MenuSistema:
         ruta_entrada = input("Ingrese la ruta del archivo a descifrar: ")
         contenido = self.gestor.leer_archivo(ruta_entrada)
         
-        if contenido:
+        if contenido is not None:
             contenido_descifrado = self.cifrador.descifrar(contenido)
             ruta_salida = input("Ingrese la ruta para guardar el archivo descifrado: ")
             self.gestor.guardar_archivo(ruta_salida, contenido_descifrado)
